@@ -2,8 +2,11 @@ import React from 'react'
 import { useState } from 'react'
 import AddStudent from './AddStudent'
 import StudentInspect from './StudentInspect'
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate, Navigate } from 'react-router-dom';
 
 function Student({student,deleteStudent}) {
+
+    let navigate = useNavigate();
 
     const [showInspect, setshowInspect] = useState(false)
     const [showDelete, setshowDelete] = useState(false)
@@ -59,8 +62,31 @@ function Student({student,deleteStudent}) {
         setselectedCourse(0)
     }
 
-    return (
+    function navigateAddLecture(){
+        if(!showAddLecture){
+            navigate(`AddClass/${String(student.id)}`);
+        }
+        else{
+            navigate("/students");
+        }
+        setshowAddLecture(!showAddLecture)
+        setshowInspect(!showInspect)
+    }
 
+    function navigateInspect(){
+        
+        if(!showInspect){
+            navigate(`Inspect/${String(student.id)}`)
+        }
+        else{
+            navigate("/students")
+        }
+        setshowInspect(!showInspect)
+        setshowAddLecture(!showAddLecture)
+    }
+    
+
+    return (
         <div className='object-box'>
             <table className="table table-bordered ">
                 <thead className="thead-dark">
@@ -86,9 +112,9 @@ function Student({student,deleteStudent}) {
                         <td>{student.enrollment_date}</td>
                         <td style={{display:"flex",justifyContent:"space-evenly"}}>
                             <a className='btn btn-success'
-                            onClick={()=>{setshowInspect(!showInspect);fetchStudentInspect(student.id)}}>Inspect</a>
+                            onClick={()=>{navigateInspect();setshowInspect(!showInspect);fetchStudentInspect(student.id)}}>Inspect</a>
                             <a className='btn btn-primary' 
-                            onClick={()=>{setshowAddLecture(!showAddLecture);fetchAvailableLectures(student.id)}}>
+                            onClick={()=>{navigateAddLecture();fetchAvailableLectures(student.id)}}>
                                 Add Class</a>
                             <a className='btn btn-danger' 
                             onClick={()=>{setshowDelete(!showDelete);deleteStudent(student.id)}}>
@@ -98,28 +124,36 @@ function Student({student,deleteStudent}) {
                 </tbody>
             </table>
 
-            {
-                showInspect&&
-                <StudentInspect studentLectures={studentClasses} setStudentClasses={setStudentClasses}/>
-            }
-            {
-                showAddLecture&&
-                <div>
-                     <form className='add-form' onSubmit={onSubmit}>
-                            <select value={selectedCourse}  onChange={handleChange} className="form-control">
-                                <option></option>
-                                {
-                                    showAddLecture&&
-                                    availableLectures.map((lecture)=><option key={lecture.id} 
-                                    value={lecture.id}>
-                                        {"Id : "+lecture.id+"  |  Lecture name  : " +lecture.lecture_name}
-                                    </option>)
-                                }
-                            </select>
-                        <input type='submit' value='Save Lecture' className='btn btn-primary'></input>
+        
+            <Routes>
+                <Route path={`Inspect/${String(student.id)}`} element={
+                    <StudentInspect studentLectures={studentClasses} setStudentClasses={setStudentClasses}/>
+                }>
+                </Route>
+            </Routes>
+            
+            <Routes>
+                <Route path={`AddClass/${String(student.id)}`} element={
+                    <div>
+                    <form className='add-form' onSubmit={onSubmit}>
+                        <select value={selectedCourse}  onChange={handleChange} className="form-control">
+                            <option></option>
+                            {
+                                showAddLecture&&
+                                availableLectures.map((lecture)=><option key={lecture.id} 
+                                value={lecture.id}>
+                                    {"Id : "+lecture.id+"  |  Lecture name  : " +lecture.lecture_name}
+                                </option>)
+                            }
+                        </select>
+                    <input type='submit' value='Save Lecture' className='btn btn-primary'></input>
                     </form>
-                </div>
-            }
+                 </div>
+                }>
+                </Route>
+            </Routes>
+                
+            
         </div>
     )
 }
