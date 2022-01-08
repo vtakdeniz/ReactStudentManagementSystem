@@ -102,7 +102,7 @@ namespace ReactStudentManagementSystem.Controllers
             _db.students.Update(student);
             _db.SaveChanges();
 
-            return Ok();
+            return Ok(lecture);
         }
 
         [HttpDelete("removeLecture")]
@@ -116,6 +116,31 @@ namespace ReactStudentManagementSystem.Controllers
             _db.SaveChanges();
             return NoContent();
             
+        }
+
+        [HttpGet("available/{id}")]
+        public IActionResult availableLectures(int? id) {
+            var student = _db.students.Include(st => st.student_Has_Lectures).ThenInclude(sh => sh.lecture).ThenInclude(le => le.lecturer).FirstOrDefault(st => st.Id == id);
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            var lectures = _db.lectures.ToList();
+
+            if (lectures != null)
+            {
+                foreach (var element in student.student_Has_Lectures)
+                {
+                    var lecture_to_remove = lectures.Find(lc => lc.Id == element.lecture_id);
+                    if (lecture_to_remove != null)
+                    {
+                        lectures.Remove(lecture_to_remove);
+                    }
+                }
+            }
+
+            return Ok(lectures);
         }
 
     }

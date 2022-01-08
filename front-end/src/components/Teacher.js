@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
+import TeacherInspect from './TeacherInspect'
 
 function Teacher({teacher,deleteTeacher}) {
 
@@ -24,17 +25,18 @@ function Teacher({teacher,deleteTeacher}) {
                         <td>{teacher.first_name}</td>
                         <td>{teacher.last_name}</td>
                         <td>{teacher.age}</td>
-                        <td style={{display:"flex",justifyContent:"space-evenly"}}><a className='btn btn-success'  onClick={()=>setshowInspect(!showInspect)}>Inspect</a>
+                        <td style={{display:"flex",justifyContent:"space-evenly"}}><a className='btn btn-success'
+                             onClick={()=>setshowInspect(!showInspect)}>Inspect</a>
                             <a className='btn btn-danger' 
                             onClick={()=>{setshowDelete(!showDelete);deleteTeacher(teacher.id)}}>Delete</a>
                         </td>
                     </tr>
                 </tbody>
             </table>
-
-            <div>
-
-            </div>
+            {
+                showInspect&&
+                <TeacherInspect teacher={teacher}/>
+            }
         </div>
     )
 }

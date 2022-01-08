@@ -16,7 +16,8 @@ namespace ReactStudentManagementSystem.Models
 
         [Required]
         public string classroom_code { get; set; }
-        
+
+        [JsonIgnore]
         public Teacher lecturer { get; set; }
 
         [Required]

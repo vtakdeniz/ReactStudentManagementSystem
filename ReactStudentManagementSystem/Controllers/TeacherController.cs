@@ -82,13 +82,12 @@ namespace ReactStudentManagementSystem.Controllers
         [HttpGet("Inspect/{id}")]
         public IActionResult Inspect(int? id)
         {
-            var teacher = _db.teachers.FirstOrDefault(t=>t.Id==id);
-            var lecturesOfTeacher = _db.lectures.Where(le => le.lecturer.Id == teacher.Id).ToList();
-            var inspectTeacherDto = new InspectTeacherDto {
-                lectures = lecturesOfTeacher,
-                teacher = teacher
-            };
-            return Ok(inspectTeacherDto);
+            var teacher = _db.teachers.Include(t => t.lectures).FirstOrDefault(t=>t.Id==id);
+            if (teacher==null)
+            {
+                return BadRequest();
+            }
+            return Ok(teacher);
         }
 
     }
