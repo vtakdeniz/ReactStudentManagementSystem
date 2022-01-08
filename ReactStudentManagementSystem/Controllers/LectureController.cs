@@ -40,7 +40,7 @@ namespace ReactStudentManagementSystem.Controllers
 
             _db.lectures.Add(lecture);
             _db.SaveChanges();
-            return Ok();
+            return CreatedAtRoute(new { Id=lecture.Id},lecture);
         }
 
         [HttpPut]

@@ -3,7 +3,7 @@ import React from 'react'
 function StudentInspect({studentLectures,setStudentClasses}) {
 
     const setClasses = async (e)=>{
-        const res = await fetch(`http://localhost:5000/api/Student/removeLecture`,{
+        const res = await fetch(`https://localhost:5001/api/Student/removeLecture`,{
             method:'DELETE',
             headers:{
                 'Content-type':'application/json'

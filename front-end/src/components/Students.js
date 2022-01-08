@@ -8,9 +8,10 @@ function Students() {
     
     const [students, setStudents] = useState([]);
     const [showAdd, setshowAdd] = useState(false)
+
     useEffect(()=>{
         const fetchStudents=async() =>{
-            let response= await fetch('http://localhost:5000/api/Student/');
+            let response= await fetch('https://localhost:5001/api/Student/');
             let data=await response.json();
             console.log(data);
             setStudents(data);
@@ -19,7 +20,7 @@ function Students() {
     },[]);
  
     const deleteStudent=async(id)=>{
-        const res = await fetch(`http://localhost:5000/api/Student/${id}`,{method:'DELETE'});
+        const res = await fetch(`https://localhost:5001/api/Student/${id}`,{method:'DELETE'});
         setStudents(students.filter(st=>st.id!==id));
     }
     
