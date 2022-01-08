@@ -3,8 +3,11 @@ import { useEffect } from 'react'
 import { useState } from 'react';
 import Student from './Student';
 import AddStudent from './AddStudent';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 
 function Students() {
+    
+    let navigate=useNavigate();
     
     const [students, setStudents] = useState([]);
     const [showAdd, setshowAdd] = useState(false)
@@ -39,12 +42,14 @@ function Students() {
 
     return (
         <div className='object-container'>
-            {
-                showAdd&&
-                <AddStudent setshowAdd={setshowAdd} showAdd={showAdd} onAdd={onAdd}/>
-            }
+            <Routes>
+                <Route path="addStudent" element={
+                    <AddStudent setshowAdd={setshowAdd} showAdd={showAdd} onAdd={onAdd}/>
+                }>
+                </Route>
+            </Routes>
             <button style={{marginLeft:"25px",marginTop:"15px"}} className={showAdd?"btn btn-danger":"btn btn-success"}
-             onClick={()=>{setshowAdd(!showAdd)}}>{showAdd?"Close":"Add Student"}</button>
+            onClick={()=>{showAdd?navigate("student"):navigate("addStudent");setshowAdd(!showAdd)}}>{showAdd?"Close":"Add Student"}</button>
             {students.map((student)=>(<Student key={student.id} student={student} deleteStudent={deleteStudent}/>))}
         </div>
     )

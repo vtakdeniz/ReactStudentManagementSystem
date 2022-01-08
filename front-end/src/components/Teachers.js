@@ -3,9 +3,10 @@ import { useEffect } from 'react'
 import { useState } from 'react';
 import AddTeacher from './AddTeacher';
 import Teacher from './Teacher';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 
 function Teachers() {
-    
+    let navigate=useNavigate();
     const [teachers, setTeachers] = useState([]);
     const [showAdd, setshowAdd] = useState(false)
 
@@ -39,12 +40,14 @@ function Teachers() {
 
     return (
         <div className='object-container'>
-             {
-                showAdd&&
-                <AddTeacher setshowAdd={setshowAdd} showAdd={showAdd} onAdd={onAdd} />
-            }
+            <Routes>
+                <Route path="addTeacher" element={
+                    <AddTeacher setshowAdd={setshowAdd} showAdd={showAdd} onAdd={onAdd} />
+                }>
+                </Route>
+            </Routes>
             <button style={{marginLeft:"25px",marginTop:"15px"}} className={showAdd?"btn btn-danger":"btn btn-success"}
-             onClick={()=>{setshowAdd(!showAdd)}}>{showAdd?"Close":"Add Teacher"}</button>
+             onClick={()=>{showAdd?navigate("teacher"):navigate("addTeacher");setshowAdd(!showAdd)}}>{showAdd?"Close":"Add Teacher"}</button>
             {teachers.map((teacher)=>(<Teacher key={teacher.id} teacher={teacher} deleteTeacher={deleteTeacher}/>))}
         </div>
     )

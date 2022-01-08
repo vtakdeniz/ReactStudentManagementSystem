@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Students from './components/Students';
 import Lectures from './components/Lectures';
 import Teachers from './components/Teachers';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 
 function App() {
 
@@ -31,10 +32,25 @@ function App() {
 
   return (
     <div className="container">
-      <Header title="Student management system" onStudentClick={onStudentClick} onTeacherClick={onTeacherClick} onLectureClick={onLectureClick}/>
-      {showStudents&&<Students/>}
-      {showLectures&&<Lectures/>}
-      {showTeachers&&<Teachers/>}
+      <Router>
+          <Header title="Student management system" 
+              onStudentClick={onStudentClick} onTeacherClick={onTeacherClick}
+              onLectureClick={onLectureClick}/>
+          <Routes>
+            <Route path="/students/*" element={
+              <Students/>  
+            }/>
+
+            <Route path="/lectures/*" element={
+              <Lectures/>  
+            }/>
+
+            <Route path="/teachers/*" element={
+              <Teachers/>  
+            }/>
+
+          </Routes>
+      </Router>
       
     </div>
   );

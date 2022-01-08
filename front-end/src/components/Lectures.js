@@ -3,9 +3,11 @@ import { useEffect } from 'react'
 import { useState } from 'react';
 import AddLecture from './AddLecture';
 import Lecture from './Lecture';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 
 function Lectures() {
-    
+    let navigate=useNavigate();
+        
     const [lectures, setLectures] = useState([]);
     const [showAdd, setshowAdd] = useState(false)
     const [lecturers,setLecturers]=useState([]);
@@ -48,12 +50,15 @@ function Lectures() {
 
     return (
         <div className='object-container'>
-            {
-                showAdd&&
-                <AddLecture setshowAdd={setshowAdd} showAdd={showAdd} onAdd={onAdd} lecturers={lecturers}/>
-            }
+            <Routes>
+                <Route path="addLecture" element={
+                    <AddLecture setshowAdd={setshowAdd} showAdd={showAdd} onAdd={onAdd} lecturers={lecturers}/>
+                }>
+                </Route>
+            </Routes>
             <button style={{marginLeft:"25px",marginTop:"15px"}} className={showAdd?"btn btn-danger":"btn btn-success"}
-             onClick={()=>{setshowAdd(!showAdd);fetchLecturers()}}>{showAdd?"Close":"Add Lecture"}</button>
+             onClick={()=>{showAdd?navigate("lecture"):navigate("addLecture");setshowAdd(!showAdd)}}>
+                 {showAdd?"Close":"Add Lecture"}</button>
             {lectures.map((lecture)=>(<Lecture key={lecture.id} lecture={lecture} deleteLecture={deleteLecture}/>))}
         </div>
     )
