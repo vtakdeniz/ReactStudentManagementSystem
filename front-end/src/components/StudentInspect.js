@@ -1,6 +1,12 @@
 import React from 'react'
+import { useEffect } from 'react';
 
-function StudentInspect({studentLectures,setStudentClasses}) {
+function StudentInspect({studentLectures,setStudentClasses,fetchStudentInspect,student}) {
+
+
+    useEffect(() => {
+        fetchStudentInspect(student.id);
+    }, [])
 
     const setClasses = async (e)=>{
         const res = await fetch(`https://localhost:5001/api/Student/removeLecture`,{

@@ -3,6 +3,7 @@ import { useState } from 'react'
 import AddStudent from './AddStudent'
 import StudentInspect from './StudentInspect'
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 function Student({student,deleteStudent}) {
 
@@ -15,6 +16,10 @@ function Student({student,deleteStudent}) {
     const [availableLectures, setavailableLectures] = useState([])
     const [selectedCourse, setselectedCourse] = useState(0);
 
+    useEffect(() => {
+        fetchAvailableLectures(student.id)
+    }, [])
+    
     const fetchStudentInspect=async(id)=>{
             let response= await fetch(`https://localhost:5001/api/Student/Inspect/${id}`);
             let data=await response.json();
@@ -74,7 +79,6 @@ function Student({student,deleteStudent}) {
     }
 
     function navigateInspect(){
-        
         if(!showInspect){
             navigate(`Inspect/${String(student.id)}`)
         }
@@ -112,7 +116,7 @@ function Student({student,deleteStudent}) {
                         <td>{student.enrollment_date}</td>
                         <td style={{display:"flex",justifyContent:"space-evenly"}}>
                             <a className='btn btn-success'
-                            onClick={()=>{navigateInspect();setshowInspect(!showInspect);fetchStudentInspect(student.id)}}>Inspect</a>
+                            onClick={()=>{navigateInspect();fetchStudentInspect(student.id)}}>Inspect</a>
                             <a className='btn btn-primary' 
                             onClick={()=>{navigateAddLecture();fetchAvailableLectures(student.id)}}>
                                 Add Class</a>
@@ -125,34 +129,34 @@ function Student({student,deleteStudent}) {
             </table>
 
         
-            <Routes>
-                <Route path={`Inspect/${String(student.id)}`} element={
-                    <StudentInspect studentLectures={studentClasses} setStudentClasses={setStudentClasses}/>
-                }>
-                </Route>
-            </Routes>
-            
-            <Routes>
-                <Route path={`AddClass/${String(student.id)}`} element={
-                    <div>
-                    <form className='add-form' onSubmit={onSubmit}>
-                        <select value={selectedCourse}  onChange={handleChange} className="form-control">
-                            <option></option>
-                            {
-                                showAddLecture&&
-                                availableLectures.map((lecture)=><option key={lecture.id} 
-                                value={lecture.id}>
-                                    {"Id : "+lecture.id+"  |  Lecture name  : " +lecture.lecture_name}
-                                </option>)
-                            }
-                        </select>
-                    <input type='submit' value='Save Lecture' className='btn btn-primary'></input>
-                    </form>
-                 </div>
-                }>
-                </Route>
-            </Routes>
-                
+            {
+                <Routes>
+                    <Route path={`Inspect/${String(student.id)}`} element={
+                            <StudentInspect studentLectures={studentClasses} setStudentClasses={setStudentClasses}
+                            fetchStudentInspect={fetchStudentInspect} student={student}/>
+                        }>
+                    </Route>
+
+                    <Route path={`AddClass/${String(student.id)}`} element={
+                            <div>
+                            <form className='add-form' onSubmit={onSubmit}>
+                                <select value={selectedCourse}  onChange={handleChange} className="form-control">
+                                    <option></option>
+                                    {
+                                        availableLectures.map((lecture)=><option key={lecture.id} 
+                                        value={lecture.id}>
+                                            {"Id : "+lecture.id+"  |  Lecture name  : " +lecture.lecture_name}
+                                        </option>)
+                                    }
+                                </select>
+                            <input type='submit' value='Save Lecture' className='btn btn-primary'></input>
+                            </form>
+                        </div>
+                    }>
+                    </Route>
+                </Routes>
+
+            }  
             
         </div>
     )
