@@ -6,9 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using ReactStudentManagementSystem.Data;
 using ReactStudentManagementSystem.Models;
 using Microsoft.EntityFrameworkCore;
+using ReactStudentManagementSystem.Dto;
 
-namespace StudentManagementSystem.Controllers
+namespace ReactStudentManagementSystem.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class StudentController:Controller
     {
         private readonly ManagementContext _db;
@@ -18,6 +21,7 @@ namespace StudentManagementSystem.Controllers
             _db = db;
         }
 
+        [HttpGet]
         public IActionResult Index() {
             List<Student> students = _db.students.ToList();
             return Ok(students);
@@ -26,18 +30,15 @@ namespace StudentManagementSystem.Controllers
         [HttpPost]
         public IActionResult Create(Student student)
         {
-            if (ModelState.IsValid) {
 
-                if (_db.students.FirstOrDefault(st => st.school_number == student.school_number) != null) {
-                    TempData["isSchoolNumberDuplicate"] = true; 
-                    return View(student);
-                }
-
-                _db.students.Add(student);
-                _db.SaveChanges();
-                return RedirectToAction("Index");
+            if (_db.students.FirstOrDefault(st => st.school_number == student.school_number) != null) {
+                return BadRequest();
             }
-            return View(student);
+
+            _db.students.Add(student);
+            _db.SaveChanges();
+            
+            return CreatedAtRoute(new { Id = student.Id }, student);
         }
 
         [HttpPut]
@@ -51,7 +52,7 @@ namespace StudentManagementSystem.Controllers
             return View(student);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult DeleteStudent(int? id) {
             var student = _db.students.FirstOrDefault(st=>st.Id==id);
 
@@ -60,12 +61,12 @@ namespace StudentManagementSystem.Controllers
             }
             _db.students.Remove(student);
             _db.SaveChanges();
-            return RedirectToAction("Index");
+            return NoContent();
         }
 
         [HttpGet("Inspect/{id}")]
         public IActionResult Inspect(int? id) {
-            var student = _db.students.Include(st=>st.student_Has_Lectures).ThenInclude(sh=>sh.lecture).ThenInclude(le=>le.lecturer).FirstOrDefault(st => st.Id == id);
+            var student = _db.students.Include(st=>st.student_Has_Lectures).ThenInclude(sh=>sh.lecture).FirstOrDefault(st => st.Id == id);
 
             if (student == null)
             {
@@ -74,23 +75,46 @@ namespace StudentManagementSystem.Controllers
             return Ok(student);
         }
 
-        [HttpPost]
-        [HttpPost("AddLectureSt/{id}")]
-        public IActionResult AddLectureToStudent(int id, Lecture lecture) {
+        [HttpPost("AddLectureSt")]
+        public IActionResult AddLectureToStudent(LectureStudentDto addLectureToStudentDto) {
+            var student = _db.students.Include(st => st.student_Has_Lectures).ThenInclude(sh => sh.lecture).ThenInclude(le => le.lecturer).FirstOrDefault(st => st.Id == addLectureToStudentDto.student_id);
+            var lecture = _db.lectures.FirstOrDefault(le => le.Id == addLectureToStudentDto.lecture_id);
+
+            if (lecture==null||student==null) {
+                return NotFound();
+            }
+
+            if (lecture.lecture_year > student.class_year)
+            {
+                return BadRequest();
+            }
+
+            foreach (var element in student.student_Has_Lectures)
+            {
+                if (lecture.Id == element.lecture_id)
+                {
+                    return BadRequest();
+                }
+            }
+
+            var student_has_lecture = new Student_has_lectures { student_id = student.Id, student = student, lecture_id = lecture.Id, lecture = lecture };
+            _db.student_Has_Lectures.Add(student_has_lecture);
+            _db.students.Update(student);
+            _db.SaveChanges();
+
             return Ok();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult RemoveLecture([FromForm]int lecture_id, [FromForm] int student_id) {
-            var relation = _db.student_Has_Lectures.FirstOrDefault(r=>r.lecture_id==lecture_id || r.student_id==student_id );
+        [HttpDelete("removeLecture")]
+        public IActionResult RemoveLecture(LectureStudentDto lectureStudentDto) {
+            var relation = _db.student_Has_Lectures.FirstOrDefault(r=>r.lecture_id==lectureStudentDto.lecture_id || r.student_id==lectureStudentDto.student_id );
             if (relation == null) {
                 return NotFound();
             }
 
             _db.student_Has_Lectures.Remove(relation);
             _db.SaveChanges();
-            return RedirectToAction("Inspect",new { id=student_id });
+            return NoContent();
             
         }
 

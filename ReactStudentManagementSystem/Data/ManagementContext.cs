@@ -14,7 +14,8 @@ namespace ReactStudentManagementSystem.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             modelBuilder.Entity<Lecture>()
                 .HasOne(l => l.lecturer)
-                .WithMany(t => t.lectures);
+                .WithMany(t => t.lectures)
+                .HasForeignKey(s=>s.lecturer_id);
                 
                 
             ManyToManyRelationshipConfiguration(modelBuilder);

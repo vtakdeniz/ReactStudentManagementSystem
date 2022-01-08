@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using ReactStudentManagementSystem.Data;
+
 namespace ReactStudentManagementSystem
 {
     public class Startup
@@ -27,7 +28,8 @@ namespace ReactStudentManagementSystem
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ManagementContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("StudentManagementConnection")));
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(s => { s.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; });
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,6 +39,12 @@ namespace ReactStudentManagementSystem
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(x => x
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .SetIsOriginAllowed(origin => true)
+              .AllowCredentials());
 
             app.UseHttpsRedirection();
 

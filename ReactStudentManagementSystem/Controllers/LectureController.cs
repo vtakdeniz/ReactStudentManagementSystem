@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ReactStudentManagementSystem.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class LectureController : Controller
     {
         private readonly ManagementContext _db;
@@ -18,6 +20,7 @@ namespace ReactStudentManagementSystem.Controllers
             _db = db;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             List<Lecture> lectures = _db.lectures.Include(le => le.lecturer).ToList();
@@ -28,12 +31,30 @@ namespace ReactStudentManagementSystem.Controllers
         [HttpPost]
         public IActionResult Create(Lecture lecture)
         {
+            if (lecture==null) {
+                return BadRequest();
+            }
+            if (_db.teachers.FirstOrDefault(t=>t.Id==lecture.lecturer_id)==null) {
+                return BadRequest();
+            }
+
+            _db.lectures.Add(lecture);
+            _db.SaveChanges();
             return Ok();
         }
 
         [HttpPut]
         public IActionResult Edit(Lecture lecture)
         {
+            var lectureFromRepo = _db.lectures.Find(lecture.Id);
+
+            if (lecture == null||lectureFromRepo==null)
+            {
+                return BadRequest();
+            }
+
+            _db.lectures.Update(lecture);
+            _db.SaveChanges();
             return Ok();
         }
 
@@ -48,7 +69,7 @@ namespace ReactStudentManagementSystem.Controllers
             }
             _db.lectures.Remove(lecture);
             _db.SaveChanges();
-            return RedirectToAction("Index");
+            return NoContent();
         }
 
     }

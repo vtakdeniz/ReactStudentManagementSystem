@@ -6,9 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using ReactStudentManagementSystem.Data;
 using ReactStudentManagementSystem.Models;
 using Microsoft.EntityFrameworkCore;
+using ReactStudentManagementSystem.Dto;
 
-namespace StudentManagementSystem.Controllers
+namespace ReactStudentManagementSystem.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class TeacherController:Controller
     {
         private readonly ManagementContext _db;
@@ -18,16 +21,12 @@ namespace StudentManagementSystem.Controllers
             _db = db;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             List<Teacher> teachers = _db.teachers.ToList();
             return Ok(teachers);
         }
-
-        /*public IActionResult Create()
-        {
-            return View();
-        }*/
 
         [HttpPost]
         public IActionResult Create(Teacher teacher)
@@ -66,7 +65,7 @@ namespace StudentManagementSystem.Controllers
             return View(teacher);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult DeleteTeacher(int? id)
         {
             var teacher= _db.teachers.FirstOrDefault(te=> te.Id == id);
@@ -79,13 +78,17 @@ namespace StudentManagementSystem.Controllers
             _db.SaveChanges();
             return NoContent();
         }
-        
+
+        [HttpGet("Inspect/{id}")]
         public IActionResult Inspect(int? id)
         {
             var teacher = _db.teachers.FirstOrDefault(t=>t.Id==id);
             var lecturesOfTeacher = _db.lectures.Where(le => le.lecturer.Id == teacher.Id).ToList();
-            ViewBag.lecturesOfTeacher = lecturesOfTeacher;
-            return Ok(teacher);
+            var inspectTeacherDto = new InspectTeacherDto {
+                lectures = lecturesOfTeacher,
+                teacher = teacher
+            };
+            return Ok(inspectTeacherDto);
         }
 
     }
