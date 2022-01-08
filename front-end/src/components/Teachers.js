@@ -47,7 +47,7 @@ function Teachers() {
                 </Route>
             </Routes>
             <button style={{marginLeft:"25px",marginTop:"15px"}} className={showAdd?"btn btn-danger":"btn btn-success"}
-             onClick={()=>{showAdd?navigate("teacher"):navigate("addTeacher");setshowAdd(!showAdd)}}>{showAdd?"Close":"Add Teacher"}</button>
+             onClick={()=>{showAdd?navigate("/teachers"):navigate("addTeacher");setshowAdd(!showAdd)}}>{showAdd?"Close":"Add Teacher"}</button>
             {teachers.map((teacher)=>(<Teacher key={teacher.id} teacher={teacher} deleteTeacher={deleteTeacher}/>))}
         </div>
     )

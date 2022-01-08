@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState } from 'react';
+import { useEffect } from 'react';
 
 function AddStudent({setshowAdd,showAdd,onAdd}) {
 
@@ -8,6 +9,10 @@ function AddStudent({setshowAdd,showAdd,onAdd}) {
     const [age, setage] = useState(0);
     const [school_number, setschool_number] = useState(0);
     const [class_year, setclass_year] = useState(0);
+
+    useEffect(() => {
+        setshowAdd(true);
+    }, [])
 
     const onSubmit=(e)=>{
         e.preventDefault();

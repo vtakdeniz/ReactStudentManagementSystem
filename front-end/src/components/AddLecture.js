@@ -10,6 +10,7 @@ function AddLecture({setshowAdd,showAdd,onAdd,lecturers,fetchLecturers}) {
     
     useEffect(() => {
         fetchLecturers();
+        setshowAdd(true);
     }, [])
 
     const onSubmit=(e)=>{

@@ -57,7 +57,7 @@ function Lectures() {
                 </Route>
             </Routes>
             <button style={{marginLeft:"25px",marginTop:"15px"}} className={showAdd?"btn btn-danger":"btn btn-success"}
-             onClick={()=>{showAdd?navigate("lecture"):navigate("addLecture");setshowAdd(!showAdd)}}>
+             onClick={()=>{showAdd?navigate("/lectures"):navigate("addLecture");setshowAdd(!showAdd)}}>
                  {showAdd?"Close":"Add Lecture"}</button>
             {lectures.map((lecture)=>(<Lecture key={lecture.id} lecture={lecture} deleteLecture={deleteLecture}/>))}
         </div>

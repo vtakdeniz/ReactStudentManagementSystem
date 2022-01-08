@@ -1,11 +1,17 @@
 import React from 'react'
 import { useState } from 'react';
+import { useEffect } from 'react';
+
 
 function AddTeacher({setshowAdd,showAdd,onAdd}) {
     const [first_name, setfirst_name] = useState('');
     const [last_name, setlast_name] = useState('');
     const [age, setage] = useState(0);
 
+    useEffect(() => {
+        setshowAdd(true);
+    }, [])
+    
     const onSubmit=(e)=>{
         e.preventDefault();
 

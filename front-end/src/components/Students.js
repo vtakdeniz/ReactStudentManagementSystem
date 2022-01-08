@@ -49,7 +49,7 @@ function Students() {
                 </Route>
             </Routes>
             <button style={{marginLeft:"25px",marginTop:"15px"}} className={showAdd?"btn btn-danger":"btn btn-success"}
-            onClick={()=>{showAdd?navigate("students/*"):navigate("addStudent");setshowAdd(!showAdd)}}>{showAdd?"Close":"Add Student"}</button>
+            onClick={()=>{showAdd?navigate("/students"):navigate("addStudent");setshowAdd(!showAdd)}}>{showAdd?"Close":"Add Student"}</button>
             {students.map((student)=>(<Student key={student.id} student={student} deleteStudent={deleteStudent}/>))}
         </div>
     )
