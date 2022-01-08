@@ -72,7 +72,7 @@ function Student({student,deleteStudent}) {
             navigate(`AddClass/${String(student.id)}`);
         }
         else{
-            navigate("../");
+            navigate("/students");
         }
         setshowAddLecture(!showAddLecture)
         setshowInspect(!showInspect)
