@@ -52,7 +52,7 @@ function Lectures() {
         <div className='object-container'>
             <Routes>
                 <Route path="addLecture" element={
-                    <AddLecture setshowAdd={setshowAdd} showAdd={showAdd} onAdd={onAdd} lecturers={lecturers}/>
+                    <AddLecture setshowAdd={setshowAdd} showAdd={showAdd} onAdd={onAdd} lecturers={lecturers} fetchLecturers={fetchLecturers}/>
                 }>
                 </Route>
             </Routes>

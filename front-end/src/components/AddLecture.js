@@ -1,12 +1,17 @@
 import React from 'react'
 import { useState } from 'react';
+import { useEffect } from 'react';
 
-function AddLecture({setshowAdd,showAdd,onAdd,lecturers}) {
+function AddLecture({setshowAdd,showAdd,onAdd,lecturers,fetchLecturers}) {
     const [lecture_name, setlecture_name] = useState('');
     const [classroom_code, setclassroom_code] = useState('');
     const [lecturer_id, setlecturer_id] = useState(0);
     const [lecture_year, setlecture_year] = useState(0);
     
+    useEffect(() => {
+        fetchLecturers();
+    }, [])
+
     const onSubmit=(e)=>{
         e.preventDefault();
 
