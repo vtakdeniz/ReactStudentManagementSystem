@@ -76,8 +76,8 @@ function Student({student,deleteStudent,editOnAdd}) {
             navigate("/students");
         }
         setshowAddLecture(!showAddLecture)
-        setshowInspect(!showInspect)
-        setShowEdit(!showEdit)
+        setshowInspect(false);
+        setShowEdit(false);
     }
 
     function navigateInspect(){
@@ -87,9 +87,9 @@ function Student({student,deleteStudent,editOnAdd}) {
         else{
             navigate("/students")
         }
-        setshowAddLecture(!showAddLecture)
         setshowInspect(!showInspect)
-        setShowEdit(!showEdit)
+        setshowAddLecture(false)
+        setShowEdit(false);
     }
     
     function navigateEditStudent(){
@@ -99,9 +99,9 @@ function Student({student,deleteStudent,editOnAdd}) {
         else{
             navigate("/students");
         }
-        setshowAddLecture(!showAddLecture)
-        setshowInspect(!showInspect)
         setShowEdit(!showEdit)
+        setshowAddLecture(false)
+        setshowInspect(false);
     }
 
 
@@ -130,14 +130,18 @@ function Student({student,deleteStudent,editOnAdd}) {
                         <td>{student.class_year}</td>
                         <td>{student.enrollment_date}</td>
                         <td style={{display:"flex",justifyContent:"space-evenly"}}>
-                            <a className='btn btn-success'
-                            onClick={()=>{navigateInspect();fetchStudentInspect(student.id)}}>Inspect</a>
-                            <a className='btn btn-primary' 
+
+                            <a className={showInspect?'btn btn-danger':'btn btn-success'}
+                            onClick={()=>{navigateInspect();fetchStudentInspect(student.id)}}>{showInspect?'Close':'Inspect'}</a>
+
+                            <a className={showAddLecture?'btn btn-danger':'btn btn-primary'}
                             onClick={()=>{navigateAddLecture();fetchAvailableLectures(student.id)}}>
-                                Add Class</a>
-                            <a className='btn btn-warning' 
+                                {showAddLecture?'Close':'Add Lecture'}</a>
+
+                            <a className={showEdit?'btn btn-danger':'btn btn-warning'}
                             onClick={()=>{navigateEditStudent()}}>
-                                Edit Student</a>
+                                {showEdit?'Close':'Edit'}</a>
+
                             <a className='btn btn-danger' 
                             onClick={()=>{setshowDelete(!showDelete);deleteStudent(student.id)}}>
                                 Delete</a>

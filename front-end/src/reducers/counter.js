@@ -1,5 +1,4 @@
 const counterReducer = (state={student_count:0,lecture_count:0,teacher_count:0},action)=>{
-    console.log(action);
     switch(action.type){
         case 'INCREMENTST':
             return {

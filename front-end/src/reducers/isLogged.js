@@ -1,10 +1,10 @@
-const loggedReducer=(state=false,action)=>{
+const boolean_reducer=(state=false,action)=>{
     switch(action.type){
-        case 'SIGN_IN':
+        case 'TOGGLE':
             return !state;
         default:
             return false;
     }
 }
 
-export default loggedReducer;
+export default boolean_reducer;

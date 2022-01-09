@@ -20,6 +20,7 @@ function Teacher({teacher,deleteTeacher,editOnAdd}) {
             navigate("/teachers")
         }
         setshowInspect(!showInspect);
+        setshowEdit(false);
     }
 
     function navigateEdit(){
@@ -31,6 +32,7 @@ function Teacher({teacher,deleteTeacher,editOnAdd}) {
                 navigate("/teachers");
             }
             setshowEdit(!showEdit)
+            setshowInspect(false);
         
     }
 
@@ -52,12 +54,12 @@ function Teacher({teacher,deleteTeacher,editOnAdd}) {
                         <td>{teacher.first_name}</td>
                         <td>{teacher.last_name}</td>
                         <td>{teacher.age}</td>
-                        <td style={{display:"flex",justifyContent:"space-evenly"}}><a className='btn btn-success'
-                             onClick={()=>navigateInspect()}>Inspect</a>
+                        <td style={{display:"flex",justifyContent:"space-evenly"}}><a className={showInspect?'btn btn-danger':'btn btn-success'}
+                             onClick={()=>navigateInspect()}>{showInspect?'Close':'Inspect'}</a>
                             <a className='btn btn-danger' 
                             onClick={()=>{setshowDelete(!showDelete);deleteTeacher(teacher.id)}}>Delete</a>
-                            <a className='btn btn-warning' 
-                            onClick={navigateEdit}>Edit</a>
+                            <a className={showEdit?'btn btn-danger':'btn btn-warning'} 
+                            onClick={navigateEdit}>{showEdit?'Close':'Edit'} </a>
                         </td>
                     </tr>
                 </tbody>

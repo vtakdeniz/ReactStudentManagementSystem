@@ -1,12 +1,10 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { useSelector , useDispatch} from 'react-redux';
-import * as action from '../actions';
+
 
 function Header({title , onLectureClick, onTeacherClick, onStudentClick}) {
     let navigate=useNavigate();
-    //let lectureCount=useSelector(state=>state.lectureCount);
-    //let studentCount=useSelector(state=>state.studentCount);
     let counter=useSelector(state=>state.counter);
 
     const dispatch = useDispatch();

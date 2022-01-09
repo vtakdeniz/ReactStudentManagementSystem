@@ -1,10 +1,10 @@
 import counterReducer from "./counter";
-import loggedReducer from "./isLogged";
+import boolean_reducer from "./isLogged";
 import { combineReducers } from "redux";
 
 const allReducers=combineReducers({
     counter:counterReducer,//counterReducer alone works too
-    isLogged:loggedReducer
+    boolean_reducer:boolean_reducer
 });
 
 export default allReducers;

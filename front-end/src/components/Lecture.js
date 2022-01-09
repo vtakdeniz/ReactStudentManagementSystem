@@ -16,6 +16,7 @@ function Lecture({lecture,deleteLecture,editOnAdd}) {
             navigate("/lectures");
         }
         setshowEdit(!showEdit)
+        setshowEdit(false);
     }
     return (
         <div className='object-box'>
@@ -41,9 +42,9 @@ function Lecture({lecture,deleteLecture,editOnAdd}) {
                         <td>{lecture.classroom_code}</td>
                         <td style={{display:"flex",justifyContent:"space-evenly"}}>
                             <a className='btn btn-danger' onClick={()=>{setshowDelete(!showDelete);deleteLecture(lecture.id)}}>Delete</a>
-                            <a className='btn btn-warning' 
+                            <a className={showEdit?'btn btn-danger':'btn btn-warning'} 
                             onClick={()=>{navigateEditLecture()}}>
-                                Edit Lecture</a>
+                                {showEdit?'Close':'Edit Lecture'} </a>
                         </td>
                     </tr>
                 </tbody>
