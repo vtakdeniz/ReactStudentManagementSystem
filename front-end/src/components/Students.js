@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Student from './Student';
 import StudentForm from './StudentForm';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { useSelector , useDispatch} from 'react-redux';
+import * as action from '../actions';
 
 function Students() {
     
@@ -11,6 +13,9 @@ function Students() {
     
     const [students, setStudents] = useState([]);
     const [showAdd, setshowAdd] = useState(false)
+
+    let counter=useSelector(state=>state.counter);
+    const dispatch = useDispatch();
 
     useEffect(()=>{
         const fetchStudents=async() =>{
@@ -25,6 +30,7 @@ function Students() {
     const deleteStudent=async(id)=>{
         const res = await fetch(`https://localhost:5001/api/Student/${id}`,{method:'DELETE'});
         setStudents(students.filter(st=>st.id!==id));
+        dispatch(action.decrementStudentCount())
     }
     
     const onAdd=async(student)=>{
@@ -38,6 +44,7 @@ function Students() {
 
         const data = await res.json();
         setStudents([...students,data]);
+        dispatch(action.incrementStudentCount())
     }
 
     const editOnAdd= async(student)=>{

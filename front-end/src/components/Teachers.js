@@ -4,17 +4,21 @@ import { useState } from 'react';
 import TeacherForm from './TeacherForm';
 import Teacher from './Teacher';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { useSelector , useDispatch} from 'react-redux';
+import * as action from '../actions';
 
 function Teachers() {
     let navigate=useNavigate();
     const [teachers, setTeachers] = useState([]);
     const [showAdd, setshowAdd] = useState(false)
 
+    let counter=useSelector(state=>state.counter);
+    const dispatch = useDispatch();
+
     useEffect(()=>{
         const fetchTeachers=async() =>{
             let response= await fetch('https://localhost:5001/api/Teacher');
             let data=await response.json();
-            console.log(data);
             setTeachers(data);
         }
         fetchTeachers();
@@ -23,6 +27,7 @@ function Teachers() {
     const deleteTeacher=async(id)=>{
         const res = await fetch(`https://localhost:5001/api/Teacher/${id}`,{method:'DELETE'});
         setTeachers(teachers.filter(tc=>tc.id!==id));
+        dispatch(action.decrementTeacherCount());
     }
 
     const onAdd=async(teacher)=>{
@@ -36,6 +41,7 @@ function Teachers() {
 
         const data = await res.json();
         setTeachers([...teachers,data]);
+        dispatch(action.incrementTeacherCount());
     }
 
     const editOnAdd=async(teacher)=>{

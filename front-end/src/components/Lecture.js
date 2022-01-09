@@ -17,7 +17,6 @@ function Lecture({lecture,deleteLecture,editOnAdd}) {
         }
         setshowEdit(!showEdit)
     }
-
     return (
         <div className='object-box'>
             <table className="table table-bordered ">

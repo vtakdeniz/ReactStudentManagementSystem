@@ -4,6 +4,8 @@ import { useState } from 'react';
 import LectureForm from './LectureForm';
 import Lecture from './Lecture';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { useSelector , useDispatch} from 'react-redux';
+import * as action from '../actions';
 
 function Lectures() {
     let navigate=useNavigate();
@@ -11,6 +13,9 @@ function Lectures() {
     const [lectures, setLectures] = useState([]);
     const [showAdd, setshowAdd] = useState(false)
     const [lecturers,setLecturers]=useState([]);
+
+    let counter=useSelector(state=>state.counter);
+    const dispatch = useDispatch();
 
     useEffect(()=>{
         const fetchLectures=async() =>{
@@ -25,6 +30,7 @@ function Lectures() {
     const deleteLecture=async(id)=>{
         const res = await fetch(`https://localhost:5001/api/Lecture/${id}`,{method:'DELETE'});
         setLectures(lectures.filter(l=>l.id!==id));
+        dispatch(action.decrementLectureCount())
     }
 
     const fetchLecturers=async()=>{
@@ -46,6 +52,7 @@ function Lectures() {
         
         const data = await res.json();
         setLectures([...lectures,data]);
+        dispatch(action.incrementLectureCount());
     }
 
     const editOnAdd=async (lecture)=>{
