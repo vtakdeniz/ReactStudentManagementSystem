@@ -42,12 +42,12 @@ namespace ReactStudentManagementSystem.Controllers
         [HttpPut]
         public IActionResult Edit(Teacher teacher)
         {
-            if (ModelState.IsValid)
-            {
-                _db.teachers.Update(teacher);
-                _db.SaveChanges();
+            if (teacher==null) {
+                return BadRequest();    
             }
-            return NoContent();
+            _db.teachers.Update(teacher);
+            _db.SaveChanges();
+            return Ok(teacher);
         }
 
         public IActionResult Delete(int? id)

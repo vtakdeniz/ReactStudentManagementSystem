@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 
 
-function AddTeacher({setshowAdd,showAdd,onAdd}) {
+function TeacherForm({setshowAdd,showAdd,onAdd,isEdit}) {
     const [first_name, setfirst_name] = useState('');
     const [last_name, setlast_name] = useState('');
     const [age, setage] = useState(0);
@@ -63,4 +63,4 @@ function AddTeacher({setshowAdd,showAdd,onAdd}) {
     )
 }
 
-export default AddTeacher
+export default TeacherForm

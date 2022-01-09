@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react';
 import Student from './Student';
-import AddStudent from './AddStudent';
+import StudentForm from './StudentForm';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 
 function Students() {
@@ -40,17 +40,36 @@ function Students() {
         setStudents([...students,data]);
     }
 
+    const editOnAdd= async(student)=>{
+        const res = await fetch(`https://localhost:5001/api/Student/`,
+        {
+          method:'PUT',
+          headers:{
+            'Content-type':'application/json'
+          },
+          body:JSON.stringify(student)
+        })
+    
+        const data = await res.json();
+        console.log(data);
+    
+        setStudents(
+        students.map((element)=>element.id===student.id ? 
+        student
+          : element));
+    }
+
     return (
         <div className='object-container'>
             <Routes>
                 <Route path="addStudent" element={
-                    <AddStudent setshowAdd={setshowAdd} showAdd={showAdd} onAdd={onAdd}/>
+                    <StudentForm setshowAdd={setshowAdd} showAdd={showAdd} onAdd={onAdd}/>
                 }>
                 </Route>
             </Routes>
             <button style={{marginLeft:"25px",marginTop:"15px"}} className={showAdd?"btn btn-danger":"btn btn-success"}
             onClick={()=>{showAdd?navigate("/students"):navigate("addStudent");setshowAdd(!showAdd)}}>{showAdd?"Close":"Add Student"}</button>
-            {students.map((student)=>(<Student key={student.id} student={student} deleteStudent={deleteStudent}/>))}
+            {students.map((student)=>(<Student key={student.id} student={student} deleteStudent={deleteStudent} editOnAdd={editOnAdd}/>))}
         </div>
     )
 }

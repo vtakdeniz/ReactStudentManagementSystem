@@ -51,7 +51,6 @@ function Teacher({teacher,deleteTeacher}) {
                     <Route path={`Inspect/${String(teacher.id)}`} element={
                            <TeacherInspect teacher={teacher}/>
                     }>
-                        {console.log("test")}
                     </Route>
                  </Routes>
             }

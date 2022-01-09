@@ -2,27 +2,37 @@ import React from 'react'
 import { useState } from 'react';
 import { useEffect } from 'react';
 
-function AddLecture({setshowAdd,showAdd,onAdd,lecturers,fetchLecturers}) {
+function LectureForm({setshowAdd,showAdd,onAdd,lecturers,fetchLecturers,isEdit,lecture}) {
     const [lecture_name, setlecture_name] = useState('');
     const [classroom_code, setclassroom_code] = useState('');
     const [lecturer_id, setlecturer_id] = useState(0);
     const [lecture_year, setlecture_year] = useState(0);
     
     useEffect(() => {
-        fetchLecturers();
-        setshowAdd(true);
+        if(typeof setshowAdd!=='undefined'){
+            fetchLecturers();
+            setshowAdd(true);
+        }
     }, [])
 
     const onSubmit=(e)=>{
         e.preventDefault();
 
-        if(!lecture_name||!classroom_code||!lecturer_id){
+        if(!isEdit&&(!lecture_name||!classroom_code||!lecturer_id)){
             alert('Please fill all the required fields');
             return;
         }
 
-        console.log(lecturer_id);
-        onAdd({lecture_name,classroom_code,lecturer_id,lecture_year});
+        else if (isEdit&&(!lecture_name||!classroom_code)){
+
+        }
+
+        if(isEdit){
+            onAdd({id:lecture.id,lecture_name,classroom_code,lecturer_id:lecture.lecturer_id,lecture_year});
+        }
+        else{
+            onAdd({lecture_name,classroom_code,lecturer_id,lecture_year});
+        }
         setlecture_name('')
         setclassroom_code('')
         setlecturer_id(0);
@@ -38,6 +48,17 @@ function AddLecture({setshowAdd,showAdd,onAdd,lecturers,fetchLecturers}) {
         <div>
             <div>
             <form className='add-form' onSubmit={onSubmit}>
+                 {
+                     isEdit&&
+                     <div className='form-controlx'>
+                        <label>Id</label>
+                        <input type='number' 
+                        value={lecture.id}
+                        disabled
+                        >
+                        </input>
+                    </div>
+                 }
                 <div className='form-controlx'>
                     <label>Lecture Name</label>
                     <input type='text' placeholder='Add Lecture Name'
@@ -57,17 +78,19 @@ function AddLecture({setshowAdd,showAdd,onAdd,lecturers,fetchLecturers}) {
                     </input>
                 </div>
 
-                <select value={lecturer_id}  onChange={handleChange} className="form-control">
-                    <option></option>
-                    {
-                        showAdd&&
-                        lecturers.map((teacher)=><option key={teacher.id} 
-                        value={teacher.id}>
-                            {"Id : "+teacher.id+"  |  Full name  : " +teacher.first_name +" "+teacher.last_name}
-                        </option>)
-                    }
-                </select>
-
+               {
+                   !isEdit&&
+                   <select value={lecturer_id}  onChange={handleChange} className="form-control">
+                        <option></option>
+                        {
+                            showAdd&&
+                            lecturers.map((teacher)=><option key={teacher.id} 
+                            value={teacher.id}>
+                                {"Id : "+teacher.id+"  |  Full name  : " +teacher.first_name +" "+teacher.last_name}
+                            </option>)
+                        }
+                    </select>
+               }
                 <div className='form-controlx'>
                     <label>Lecture's Year</label>
                     <input type='number' placeholder='Enter Lecture Year'
@@ -84,4 +107,4 @@ function AddLecture({setshowAdd,showAdd,onAdd,lecturers,fetchLecturers}) {
     )
 }
 
-export default AddLecture
+export default LectureForm

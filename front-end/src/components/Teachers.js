@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react';
-import AddTeacher from './AddTeacher';
+import TeacherForm from './TeacherForm';
 import Teacher from './Teacher';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 
@@ -42,7 +42,7 @@ function Teachers() {
         <div className='object-container'>
             <Routes>
                 <Route path="addTeacher" element={
-                    <AddTeacher setshowAdd={setshowAdd} showAdd={showAdd} onAdd={onAdd} />
+                    <TeacherForm setshowAdd={setshowAdd} showAdd={showAdd} onAdd={onAdd} />
                 }>
                 </Route>
             </Routes>

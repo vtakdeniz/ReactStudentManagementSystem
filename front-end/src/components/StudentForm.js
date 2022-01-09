@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react';
 import { useEffect } from 'react';
 
-function AddStudent({setshowAdd,showAdd,onAdd}) {
+function StudentForm({setshowAdd,showAdd,onAdd,isEdit,student}) {
 
     const [first_name, setfirst_name] = useState('');
     const [last_name, setlast_name] = useState('');
@@ -11,7 +11,9 @@ function AddStudent({setshowAdd,showAdd,onAdd}) {
     const [class_year, setclass_year] = useState(0);
 
     useEffect(() => {
-        setshowAdd(true);
+        if(typeof setshowAdd!=='undefined'){
+            setshowAdd(true);
+        }
     }, [])
 
     const onSubmit=(e)=>{
@@ -22,7 +24,12 @@ function AddStudent({setshowAdd,showAdd,onAdd}) {
             return;
         }
 
-        onAdd({first_name,last_name,age,school_number,class_year});
+        if(isEdit){
+            onAdd({id:student.id,first_name,last_name,age,school_number,class_year});
+        }
+        else{
+            onAdd({first_name,last_name,age,school_number,class_year});
+        }
         setfirst_name('')
         setlast_name('')
         setage(0);
@@ -32,6 +39,17 @@ function AddStudent({setshowAdd,showAdd,onAdd}) {
     return (
         <div>
             <form className='add-form' onSubmit={onSubmit}>
+                 {
+                     isEdit&&
+                     <div className='form-controlx'>
+                        <label>Id</label>
+                        <input type='number'
+                        value={student.id}
+                        disabled
+                        >
+                        </input>
+                    </div>
+                 }
                 <div className='form-controlx'>
                     <label>First Name</label>
                     <input type='text' placeholder='Add First Name'
@@ -84,4 +102,4 @@ function AddStudent({setshowAdd,showAdd,onAdd}) {
     )
 }
 
-export default AddStudent
+export default StudentForm

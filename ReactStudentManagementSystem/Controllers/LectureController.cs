@@ -48,6 +48,8 @@ namespace ReactStudentManagementSystem.Controllers
         {
             var lectureFromRepo = _db.lectures.Find(lecture.Id);
 
+            _db.Entry(lectureFromRepo).State = EntityState.Detached;
+
             if (lecture == null||lectureFromRepo==null)
             {
                 return BadRequest();
@@ -55,7 +57,10 @@ namespace ReactStudentManagementSystem.Controllers
 
             _db.lectures.Update(lecture);
             _db.SaveChanges();
-            return Ok();
+
+            var lectureToSend = _db.lectures.Include(le => le.lecturer).FirstOrDefault(l=>l.Id==lecture.Id);
+
+            return Ok(lectureToSend);
         }
 
         [HttpDelete("{id}")]

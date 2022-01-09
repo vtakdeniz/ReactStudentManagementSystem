@@ -1,8 +1,22 @@
 import React from 'react'
 import { useState } from 'react'
+import LectureForm from './LectureForm';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 
-function Lecture({lecture,deleteLecture}) {
+function Lecture({lecture,deleteLecture,editOnAdd}) {
+    let navigate=useNavigate();
     const [showDelete, setshowDelete] = useState(false)
+    const [showEdit, setshowEdit] = useState(false)
+
+    function navigateEditLecture(){
+        if(!showEdit){
+            navigate(`Edit/${String(lecture.id)}`);
+        }
+        else{
+            navigate("/lectures");
+        }
+        setshowEdit(!showEdit)
+    }
 
     return (
         <div className='object-box'>
@@ -28,10 +42,26 @@ function Lecture({lecture,deleteLecture}) {
                         <td>{lecture.classroom_code}</td>
                         <td style={{display:"flex",justifyContent:"space-evenly"}}>
                             <a className='btn btn-danger' onClick={()=>{setshowDelete(!showDelete);deleteLecture(lecture.id)}}>Delete</a>
+                            <a className='btn btn-warning' 
+                            onClick={()=>{navigateEditLecture()}}>
+                                Edit Lecture</a>
                         </td>
                     </tr>
                 </tbody>
             </table>
+
+
+            {
+                <Routes>
+                    <Route path={`Edit/${String(lecture.id)}`} element={
+                            <LectureForm  isEdit={true}
+                             lecture={lecture} onAdd={editOnAdd}/>
+                        }>
+                    </Route>
+                </Routes>
+
+            }  
+
         </div>
     )
 }

@@ -44,12 +44,17 @@ namespace ReactStudentManagementSystem.Controllers
         [HttpPut]
         public IActionResult Edit(Student student)
         {
-            if (ModelState.IsValid) {
-                _db.students.Update(student);
-                _db.SaveChanges();
-                return RedirectToAction("Index");
+            if (student==null) {
+                return BadRequest();
             }
-            return View(student);
+            var studentFromRepo = _db.students.Find(student.Id);
+
+            _db.Entry(studentFromRepo).State = EntityState.Detached;
+
+            student.enrollment_date = studentFromRepo.enrollment_date;
+            _db.students.Update(student);
+            _db.SaveChanges();
+            return Ok(student);
         }
 
         [HttpDelete("{id}")]

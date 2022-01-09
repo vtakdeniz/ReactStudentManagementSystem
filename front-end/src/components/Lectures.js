@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react';
-import AddLecture from './AddLecture';
+import LectureForm from './LectureForm';
 import Lecture from './Lecture';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 
@@ -48,18 +48,38 @@ function Lectures() {
         setLectures([...lectures,data]);
     }
 
+    const editOnAdd=async (lecture)=>{
+        const res = await fetch(`https://localhost:5001/api/Lecture/`,
+        {
+          method:'PUT',
+          headers:{
+            'Content-type':'application/json'
+          },
+          body:JSON.stringify(lecture)
+        })
+    
+        const data = await res.json();
+        console.log(data);
+    
+        setLectures(
+        lectures.map((element)=>element.id===lecture.id ? 
+        data
+          : element));
+    }
+
     return (
         <div className='object-container'>
             <Routes>
                 <Route path="addLecture" element={
-                    <AddLecture setshowAdd={setshowAdd} showAdd={showAdd} onAdd={onAdd} lecturers={lecturers} fetchLecturers={fetchLecturers}/>
+                    <LectureForm setshowAdd={setshowAdd} showAdd={showAdd} onAdd={onAdd} lecturers={lecturers} fetchLecturers={fetchLecturers}/>
                 }>
                 </Route>
             </Routes>
             <button style={{marginLeft:"25px",marginTop:"15px"}} className={showAdd?"btn btn-danger":"btn btn-success"}
              onClick={()=>{showAdd?navigate("/lectures"):navigate("addLecture");setshowAdd(!showAdd)}}>
                  {showAdd?"Close":"Add Lecture"}</button>
-            {lectures.map((lecture)=>(<Lecture key={lecture.id} lecture={lecture} deleteLecture={deleteLecture}/>))}
+            {lectures.map((lecture)=>(<Lecture key={lecture.id} lecture={lecture}
+             deleteLecture={deleteLecture} editOnAdd={editOnAdd}/>))}
         </div>
     )
 }

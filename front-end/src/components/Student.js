@@ -1,16 +1,17 @@
 import React from 'react'
 import { useState } from 'react'
-import AddStudent from './AddStudent'
+import StudentForm from './StudentForm'
 import StudentInspect from './StudentInspect'
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate, Navigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
-function Student({student,deleteStudent}) {
+function Student({student,deleteStudent,editOnAdd}) {
 
     let navigate = useNavigate();
 
     const [showInspect, setshowInspect] = useState(false)
     const [showDelete, setshowDelete] = useState(false)
+    const [showEdit, setShowEdit] = useState(false)
     const [showAddLecture, setshowAddLecture] = useState(false)
     const [studentClasses, setStudentClasses] = useState([])
     const [availableLectures, setavailableLectures] = useState([])
@@ -76,6 +77,7 @@ function Student({student,deleteStudent}) {
         }
         setshowAddLecture(!showAddLecture)
         setshowInspect(!showInspect)
+        setShowEdit(!showEdit)
     }
 
     function navigateInspect(){
@@ -85,13 +87,23 @@ function Student({student,deleteStudent}) {
         else{
             navigate("/students")
         }
-        setshowInspect(!showInspect)
         setshowAddLecture(!showAddLecture)
+        setshowInspect(!showInspect)
+        setShowEdit(!showEdit)
     }
     
     function navigateEditStudent(){
-        
+        if(!showEdit){
+            navigate(`Edit/${String(student.id)}`);
+        }
+        else{
+            navigate("/students");
+        }
+        setshowAddLecture(!showAddLecture)
+        setshowInspect(!showInspect)
+        setShowEdit(!showEdit)
     }
+
 
     return (
         <div className='object-box'>
@@ -140,6 +152,12 @@ function Student({student,deleteStudent}) {
                     <Route path={`Inspect/${String(student.id)}`} element={
                             <StudentInspect studentLectures={studentClasses} setStudentClasses={setStudentClasses}
                             fetchStudentInspect={fetchStudentInspect} student={student}/>
+                        }>
+                    </Route>
+
+                    <Route path={`Edit/${String(student.id)}`} element={
+                            <StudentForm  isEdit={true}
+                             student={student} onAdd={editOnAdd}/>
                         }>
                     </Route>
 
