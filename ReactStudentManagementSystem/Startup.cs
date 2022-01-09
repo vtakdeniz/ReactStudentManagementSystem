@@ -29,7 +29,20 @@ namespace ReactStudentManagementSystem
         {
             services.AddDbContext<ManagementContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("StudentManagementConnection")));
             services.AddControllers().AddNewtonsoftJson(s => { s.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; });
-            
+
+            var defaultPolicy = "defaultPolicy";
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: defaultPolicy,
+                                  builder =>
+                                  {
+                                      builder.WithOrigins("http://localhost:3000")
+                                      .AllowAnyMethod()
+                                      .AllowAnyHeader();
+                                  });
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,13 +53,15 @@ namespace ReactStudentManagementSystem
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors(x => x
+            /*app.UseCors(x => x
               .AllowAnyMethod()
               .AllowAnyHeader()
               .SetIsOriginAllowed(origin => true)
-              .AllowCredentials());
+              .AllowCredentials());*/
 
             app.UseHttpsRedirection();
+
+            app.UseCors("defaultPolicy");
 
             app.UseRouting();
 

@@ -89,6 +89,9 @@ function Student({student,deleteStudent}) {
         setshowAddLecture(!showAddLecture)
     }
     
+    function navigateEditStudent(){
+        
+    }
 
     return (
         <div className='object-box'>
@@ -120,6 +123,9 @@ function Student({student,deleteStudent}) {
                             <a className='btn btn-primary' 
                             onClick={()=>{navigateAddLecture();fetchAvailableLectures(student.id)}}>
                                 Add Class</a>
+                            <a className='btn btn-warning' 
+                            onClick={()=>{navigateEditStudent()}}>
+                                Edit Student</a>
                             <a className='btn btn-danger' 
                             onClick={()=>{setshowDelete(!showDelete);deleteStudent(student.id)}}>
                                 Delete</a>
