@@ -38,6 +38,25 @@ function Teachers() {
         setTeachers([...teachers,data]);
     }
 
+    const editOnAdd=async(teacher)=>{
+        const res = await fetch(`https://localhost:5001/api/Teacher/`,
+        {
+          method:'PUT',
+          headers:{
+            'Content-type':'application/json'
+          },
+          body:JSON.stringify(teacher)
+        })
+    
+        const data = await res.json();
+        console.log(data);
+    
+        setTeachers(
+        teachers.map((element)=>element.id===teacher.id ? 
+        data
+          : element));
+    }
+
     return (
         <div className='object-container'>
             <Routes>
@@ -48,7 +67,8 @@ function Teachers() {
             </Routes>
             <button style={{marginLeft:"25px",marginTop:"15px"}} className={showAdd?"btn btn-danger":"btn btn-success"}
              onClick={()=>{showAdd?navigate("/teachers"):navigate("addTeacher");setshowAdd(!showAdd)}}>{showAdd?"Close":"Add Teacher"}</button>
-            {teachers.map((teacher)=>(<Teacher key={teacher.id} teacher={teacher} deleteTeacher={deleteTeacher}/>))}
+            {teachers.map((teacher)=>(<Teacher key={teacher.id} 
+            teacher={teacher} deleteTeacher={deleteTeacher} editOnAdd={editOnAdd}/>))}
         </div>
     )
 }

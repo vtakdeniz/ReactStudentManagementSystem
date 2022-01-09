@@ -2,13 +2,15 @@ import React from 'react'
 import { useState } from 'react'
 import TeacherInspect from './TeacherInspect'
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate, Navigate } from 'react-router-dom';
+import TeacherForm from './TeacherForm';
 
-function Teacher({teacher,deleteTeacher}) {
+function Teacher({teacher,deleteTeacher,editOnAdd}) {
 
     let navigate = useNavigate();
 
     const [showInspect, setshowInspect] = useState(false)
     const [showDelete, setshowDelete] = useState(false)
+    const [showEdit, setshowEdit] = useState(false)
 
     function navigateInspect(){
         if(!showInspect){
@@ -18,6 +20,18 @@ function Teacher({teacher,deleteTeacher}) {
             navigate("/teachers")
         }
         setshowInspect(!showInspect);
+    }
+
+    function navigateEdit(){
+
+            if(!showEdit){
+                navigate(`Edit/${String(teacher.id)}`);
+            }
+            else{
+                navigate("/teachers");
+            }
+            setshowEdit(!showEdit)
+        
     }
 
     return (
@@ -42,6 +56,8 @@ function Teacher({teacher,deleteTeacher}) {
                              onClick={()=>navigateInspect()}>Inspect</a>
                             <a className='btn btn-danger' 
                             onClick={()=>{setshowDelete(!showDelete);deleteTeacher(teacher.id)}}>Delete</a>
+                            <a className='btn btn-warning' 
+                            onClick={navigateEdit}>Edit</a>
                         </td>
                     </tr>
                 </tbody>
@@ -51,6 +67,11 @@ function Teacher({teacher,deleteTeacher}) {
                     <Route path={`Inspect/${String(teacher.id)}`} element={
                            <TeacherInspect teacher={teacher}/>
                     }>
+                    </Route>
+                    <Route path={`Edit/${String(teacher.id)}`} element={
+                            <TeacherForm  isEdit={true}
+                             teacher={teacher} onAdd={editOnAdd}/>
+                        }>
                     </Route>
                  </Routes>
             }

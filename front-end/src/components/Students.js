@@ -55,7 +55,7 @@ function Students() {
     
         setStudents(
         students.map((element)=>element.id===student.id ? 
-        student
+        data
           : element));
     }
 
