@@ -43,7 +43,7 @@ function Lecture({lecture,deleteLecture,editOnAdd}) {
                         <td style={{display:"flex",justifyContent:"space-evenly"}}>
                             <a className='btn btn-danger' onClick={()=>{setshowDelete(!showDelete);deleteLecture(lecture.id)}}>Delete</a>
                             <a className={showEdit?'btn btn-danger':'btn btn-warning'} 
-                            onClick={()=>{navigateEditLecture()}}>
+                            onClick={()=>{navigateEditLecture();setshowEdit(!showEdit);}}>
                                 {showEdit?'Close':'Edit Lecture'} </a>
                         </td>
                     </tr>

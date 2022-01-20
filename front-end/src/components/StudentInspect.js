@@ -34,7 +34,7 @@ class StudentInspect extends React.Component {
         <ul className="list-group object-inspect-list">
             {this.props.studentLectures.map((e,i)=>
                 <li key={i} className="list-group-item object-inspect-list-item">
-                    <h3>Lecture Name : {e.lecture_name} | Classroom Code : {e.lecture.classroom_code}</h3>
+                    <h3>Lecture Name : {e.lecture.lecture_name} | Classroom Code : {e.lecture.classroom_code}</h3>
                     <a  className="btn btn-danger" 
                         onClick={()=>this.setClasses(e)}>
                         Delete class

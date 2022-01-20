@@ -1,5 +1,6 @@
 appsettings.json
 launchSettings.json
+appsettings.Development.json
 
 # globs
 Makefile.in
